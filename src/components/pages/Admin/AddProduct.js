@@ -1,0 +1,116 @@
+import React, { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { getAllCategories } from '../../../api/categoryapi'
+import { addProduct } from '../../../api/productApi'
+import { isAuthenticated } from '../../../api/userApi'
+import AdminSidebar from '../../layout/AdminSidebar'
+import Navbar from '../../layout/Navbar'
+
+const AddProduct = () => {
+    const [categories, setCategories] = useState([])
+    const [product, setProduct] = useState({
+        product_name: '',
+        product_price: '',
+        product_description: '',
+        count_in_stock: '',
+        product_image:'',
+        category:'',
+        error:'',
+        success:false,
+        formdata: ''
+    })
+    let sel_ref = useRef()
+    let file_ref = useRef()
+
+    const {token} = isAuthenticated()
+    const {product_name, product_price, product_description, count_in_stock, error, success, formdata} = product
+
+    useEffect(()=>{
+        getAllCategories()
+        .then(data=>setCategories(data))
+        setProduct({...product, formdata: new FormData})
+    },[])
+
+    const handleChange = name => e => {
+        let value
+        if(name === 'product_image'){
+            value = e.target.files[0]
+        }
+        else{
+            value = e.target.value
+        }
+        setProduct({...product, [name]: value})
+        formdata.set(name, value)
+        console.log(formdata)
+    }
+    const handleSubmit = e => {
+        e.preventDefault()
+        addProduct(formdata, token)
+        .then(data=>{
+            if(data.error){
+                setProduct({...product, error:data.error, success: false})
+            }
+            else{
+                setProduct({success: true, product_name: '', product_price: '', product_description: '', count_in_stock:'', formdata: new FormData, error: ''})
+                sel_ref.current.value = ''
+                file_ref.current.value = ''
+            }
+        })
+    }
+
+    const showError = () => {
+        if(error){
+            return <div className='alert alert-danger'>{error}</div>
+        }
+    }
+    const showSuccess = () => {
+        if(success){
+            return <div className='alert alert-success'>Product Added Successfully.<Link to='/admin/products'>Go Back.</Link></div>
+        }
+    }
+
+  return (
+    <>
+    <Navbar/>
+    
+    <div className='container-fluid'>
+        <div className='row'>
+            <div className='col-md-3'>
+                <AdminSidebar product/>
+            </div>
+            <div className='col-md-9 p-5'>
+                <h2>Add New Product.</h2>
+                {showError()}
+                {showSuccess()}
+                <form className='p-5'>
+                    <label htmlFor='product_name'>Product Name</label>
+                    <input type='text' className='form-control mb-1' id='product_name' onChange={handleChange('product_name')} value={product_name}/>
+                    <label htmlFor='product_price'>Product Price</label>
+                    <input type='number' className='form-control mb-1' id='product_price' onChange={handleChange('product_price')} value={product_price}/>
+                    <label htmlFor='product_description'>Description</label>
+                    <textarea className='form-control mb-1' rows={5} id='product_description' onChange={handleChange
+                    ('product_description')} value={product_description}></textarea>
+                    <label htmlFor='count'>Count in Stock</label>
+                    <input type='number' className='form-control mb-1' id='count' onChange={handleChange('count_in_stock')} value={count_in_stock}/>
+                    <label htmlFor='image'>Product Image</label>
+                    <input type='file' className='form-control mb-1' id='image' onChange={handleChange('product_image')} ref={file_ref}/>
+                    <label htmlFor='category'>Category</label>
+                    <select id='category' className='form-control mb-1' onChange={handleChange('category')} ref={sel_ref}>
+                        <option>Select Category</option>
+                        {
+                            categories && categories.map(cat=>{
+                                return <option key={cat._id} value={cat._id}>{cat.category_name}</option>
+                            })
+                        }
+                    </select>
+
+                    <button className='btn btn-warning w-100' onClick={handleSubmit}>Add Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </>
+  )
+}
+
+export default AddProduct

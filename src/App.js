@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import Myroutes from "./Myroutes";
+import './index.css'
+import GlobalContextProvider from "./hooks/GlobalContext";
+import { Provider } from "react-redux";
+// import { myStore } from "./hooks/redux/store";
+// import { combineReducers, createStore } from "redux";
+// import gameReducer from "./hooks/redux/gameReducer";
+// import counterReducer from "./hooks/redux/counterReducer";
+import {store} from './components/reducers/store'
 
 function App() {
+  // const myStore = createStore(gameReducer)
+  // const rootReducer = combineReducers({
+  //   counter: counterReducer,
+  //   game: gameReducer
+  // })
+  // const myStore = createStore(rootReducer)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Provider store={store}>
+        <GlobalContextProvider>
+          <Myroutes />
+        </GlobalContextProvider>
+      </Provider>
+    </>
   );
 }
 
