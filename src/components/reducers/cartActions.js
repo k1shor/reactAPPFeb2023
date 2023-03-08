@@ -1,6 +1,6 @@
 import swal from "sweetalert"
 import { getProductDetails } from "../../api/productApi"
-import { ADD_TO_CART, REMOVE_FROM_CART } from "./cartConstants"
+import { ADD_TO_CART, REMOVE_FROM_CART, SAVE_SHIPPING_INFO } from "./cartConstants"
 
 export const add_item_to_cart = (product, quantity) => async (dispatch, getState) => {
 // product - id
@@ -31,4 +31,14 @@ export const removeFromCart = (id) => (dispatch, getState) => {
     })
     swal('Removed','Item removed from Cart','info')
     localStorage.setItem("cart_items", JSON.stringify(getState().cart.cart_items))
+}
+
+export const saveShippingInfo = (shipping_info) => (dispatch, getState) => {
+    dispatch({
+        type: SAVE_SHIPPING_INFO,
+        payload: shipping_info
+    })
+    console.log(getState())
+    swal('Success',"Shipping Information updated", 'success')
+    localStorage.setItem("shipping_info",JSON.stringify(getState().cart.shipping_info))
 }

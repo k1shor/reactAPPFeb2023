@@ -93,7 +93,7 @@ const AddProduct = () => {
                     <label htmlFor='count'>Count in Stock</label>
                     <input type='number' className='form-control mb-1' id='count' onChange={handleChange('count_in_stock')} value={count_in_stock}/>
                     <label htmlFor='image'>Product Image</label>
-                    <input type='file' className='form-control mb-1' id='image' onChange={handleChange('product_image')} ref={file_ref}/>
+                    <input type='file' className='form-control mb-1' id='image' onChange={handleChange('product_image')} ref={file_ref} />
                     <label htmlFor='category'>Category</label>
                     <select id='category' className='form-control mb-1' onChange={handleChange('category')} ref={sel_ref}>
                         <option>Select Category</option>

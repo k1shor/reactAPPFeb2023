@@ -17,10 +17,13 @@ import FAQ from './components/pages/FAQ'
 import ForgetPassword from './components/pages/ForgetPassword'
 import Home from './components/pages/Home'
 import Login from './components/pages/Login'
+import PaymentElement from './components/pages/PaymentElement'
+import PaymentSuccess from './components/pages/PaymentSuccess'
 import Products from './components/pages/Products'
 import Register from './components/pages/Register'
 import ResetPassword from './components/pages/ResetPassword'
 import Shipping from './components/pages/Shipping'
+import UserProfile from './components/pages/UserProfile'
 import ProductDetails from './components/ProductDetails'
 import First from './First'
 import Counter from './hooks/Counter'
@@ -68,6 +71,9 @@ const Myroutes = () => {
           <Route path='/cart' element={<Cart />} />
           <Route path='/product/:id' element={<ProductDetails />} />
           <Route path='/shipping' element = {<Shipping/>}/>
+          <Route path='/payment' element={<PaymentElement/>}/>
+          <Route path='/paymentsuccess' element={<PaymentSuccess/>}/>
+          <Route path='/userprofile' element={<UserProfile/>}/>
 
         </Route>
 
